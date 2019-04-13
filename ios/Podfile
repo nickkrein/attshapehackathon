@@ -1,0 +1,13 @@
+platform :ios, '9.3'
+target 'ATTShapeHackathon' do
+  use_frameworks!
+  pod 'ViroReact', :path => '../node_modules/react-viro/ios/'
+  pod 'ViroKit', :path => '../node_modules/react-viro/ios/dist/ViroRenderer/'
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+end
+
+# Hack to fix linker error between GVRSDK and React
+post_install do |installer|
+  system(". ./pod_post_install.sh")
+end
