@@ -16,8 +16,12 @@ import {
   ViroImage,
   ViroButton,
   ViroConstants,
-  ViroARTrackingTargets
+  ViroARTrackingTargets,
+  ViroAnimations
 } from 'react-viro';
+import { arrowFunctionExpression } from '@babel/types';
+
+import CameraOverlayWrapper from './CameraOverlayWrapper';
 
 export default class CoffeeMakerScene extends Component {
 
@@ -29,37 +33,20 @@ export default class CoffeeMakerScene extends Component {
 
   getARScene() {
     return (
-      <ViroNode>
         <ViroARObjectMarker target={"coffeemaker"} onAnchorFound={() => {
           this.setState({
             text: "Coffee Maker"
           })
         }}>
-          <ViroFlexView
-            style={styles.hud} 
-            width={0.1} 
-            height={0.05} 
-            materials="hud_text_bg" 
+          <ViroImage
+            style={styles.imageStyle}
             position={[0, 0.15, -0.01 ]}
-            transformBehaviors={["billboardZ", "billboardY"]}
-            opacity={1}
-            // onClick
-          >
-            <ViroText 
-              textClipMode="None"
-              scale={[0.05, 0.05, 0.05]}
-              text={this.state.text}
-              style={styles.textStyle}
-            />
-            <ViroImage
-              height={1}
-              width={1}
-              // placeholderSource={require("")}
-              source={{uri: ""}} //should be an arrow, FlexView position will need to be dynamic
-            />
-          </ViroFlexView>
+            height={.07}
+            width={.05}
+            // placeholderSource={require("")}
+            source={require("../assets/ar-camera/up_arrow.png")}
+          />
         </ViroARObjectMarker>
-      </ViroNode>
     )
   }
 
@@ -83,7 +70,7 @@ export default class CoffeeMakerScene extends Component {
   render() {
     return (
       <ViroARScene onTrackingUpdated={this._onInitialized} >
-        { !this.state.isTracking ? this.getNoTrackingUI() : this.getARScene() }  
+        { !this.state.isTracking ? this.getNoTrackingUI() : this.getARScene() } 
       </ViroARScene>
     );
   }
@@ -121,6 +108,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
+  imageStyle: {
+    flex: 1,
+  },
   hud: {
     flexDirection: 'row',
     alignItems: 'flex-start'
@@ -139,6 +129,17 @@ ViroMaterials.createMaterials({
     lightingModel: "Constant",
     diffuseColor: "rgba(0,0,0,.5)"
   }
+});
+
+ViroAnimations.registerAnimations({
+  stepOne:{
+    properties:{ 
+      positionY: 0.2, 
+    },
+    easing: "EaseOut",
+    duration: 3000,
+  }
+  //add other step animations here
 });
 
 export { 

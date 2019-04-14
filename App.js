@@ -51,7 +51,12 @@ const INACTIVE_COLOR = '#d8d8d8';
 
 const MainNavigator = createStackNavigator({
   Home: { screen: Home },
-  ARAssistant: { screen: ARAssistant }
+  ARAssistant: { 
+    screen: ARAssistant,
+    navigationOptions: {
+      header: null,
+    } 
+  }
   //All the screens for Support tab will go here
   //Can ignore Login - I am working off of Hunter Native
 });
