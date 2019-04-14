@@ -1,12 +1,13 @@
 import React from 'react';
-import { Text, View, StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { Text, View, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Dimensions } from 'react-native';
+// import HealthCheck from './HealthCheck';
 
 const screenHeight = Dimensions.get('window').height;
 
 const displaySteps = (currentAndNextStep) => {
   const [ currentStep, nextStep ] = currentAndNextStep;
 
-  const nextStepText =  () => {
+  const nextStepText = () => {
     if (nextStep.text) { 
       const words = nextStep.text.split(" ");
       let returnText = "";
@@ -61,7 +62,7 @@ displayNextOrDoneButton = (currentAndNextStep, onPressNext) => {
   )
 }
 
-export default ({ currentAndNextStep, onPressBack, detectionHeader, displayCheckMark, onPressNext }) => (
+export default ({ currentAndNextStep, onPressBack, detectionHeader, displayCheckMark, onPressNext, showHealthCheck, beginService }) => (
   <View style={styles.container}>
     <View style={{width: '100%', backgroundColor: currentAndNextStep ? 'rgba(52, 52, 52, 0.3)' : null}}>
       <View style={styles.topIconsWrapper}>
@@ -76,10 +77,16 @@ export default ({ currentAndNextStep, onPressBack, detectionHeader, displayCheck
       {currentAndNextStep ? displaySteps(currentAndNextStep) : null}
       </View>
     </View>
-    {displayCheckMark ?  <Image style={styles.checkmark} source={require('../assets/ar-camera/check.png')} /> : null }
+    {displayCheckMark ? 
+      <View>
+        <ActivityIndicator style={{marginBottom: 100}} size="large" color="#ffffff" />
+        <Image style={styles.checkmark} source={require('../assets/ar-camera/check.png')} /> 
+      </View> : null }
+    {/* {showHealthCheck ? <HealthCheck beginService={beginService} /> : null} */}
     {currentAndNextStep ? displayNextOrDoneButton(currentAndNextStep, onPressNext) : null}
   </View>
 );
+
 const styles = StyleSheet.create({
   container: {
     height: screenHeight,
@@ -100,10 +107,12 @@ const styles = StyleSheet.create({
     fontFamily: 'HelveticaNeue-Medium',
     fontSize: 21,
     marginTop: 40,
+    marginLeft: 20,
+    marginRight: 20,
     textAlign: 'center'
   },
   checkmark: {
-    marginBottom: 200
+    marginBottom: 200,
   },
   currentStep: {
     fontFamily: 'HelveticaNeue-Bold',
@@ -114,7 +123,7 @@ const styles = StyleSheet.create({
   nextStep: {
     fontFamily: 'HelveticaNeue-Bold',
     fontSize: 18,
-    color: '#dbdbdb',
+    color: 'rgba(255,255,255,0.5)',
     width: 233,
   },
   stepWrapper: {
@@ -122,8 +131,9 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   stepLabel: {
-    color: '#b7b7b7',
-    fontSize: 16
+    fontFamily: 'HelveticaNeue-Bold',
+    color: 'black',
+    fontSize: 18,
   },
   labelWrapper: {
     height: 30,

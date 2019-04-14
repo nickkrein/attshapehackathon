@@ -1,0 +1,22 @@
+{
+  "name": "device",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server/server.js",
+  "scripts": {
+    "test": "mocha --timeout 10000",
+    "start": "nodemon ./server/server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-fuzzy": "^1.6.1",
+    "chai-http": "^4.2.1",
+    "request": "^2.88.0"
+  }
+}

@@ -2,22 +2,45 @@ import React, { Component } from 'react';
 import CameraOverlay from './CameraOverlay';
 
 const steps = [
-  "Lift open Coffee Maker lid. Fill carafe with cold tap water and pour water into water reservoir at back of unit.",
-  "Place empty carafe on the warming plate.",
-  "Place permanent filter in removable filter holder. Measure 1 scoop of regular grind coffee for each desired cup.",
-  "Lower the filter holder down into the housing. Close the lid.",
-  "Plug the power cord and Press the BREW NOW/AUTO OFF button once; the light around BREW NOW/AUTO OFF button will be white to signal that appliance is working.",
-  "When the brew cycle is complete, 3 audible beeps will be heard and TIME SINCE BREW icon will show on LCD display."
+  "Open the lid by pressing the top tab toward the back of the coffee maker and lifting.",
+  "Remove filter if one is in the basket.",
+  "Lift the handle located near the front face of the coffee maker to allow removal of the basket.",
+  "Check the bottom of the basket for blockage around the coil."
 ]
 
 export default class CameraOverlayWrapper extends Component {
   state = {
-    detectionHeader: "Focus your camera at an object.",
+    detectionHeader: "Focus your camera on the device you are troubleshooting.",
     displayCheckMark: false,
     //IMPORTANT***** currentAndNextStep should be initialized to null
     //the below array set to currentAndNextStep should be set once the object is detected
-    currentAndNextStep: [ {number: 1 , text: steps[0] }, {number: 2, text: steps[1]} ]
+    currentAndNextStep: null,
+    detected: this.props.detected,
+    isLoading: false,
+    showHealthCheck: false,
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.detected !== this.props.detected) {
+      this.setState({
+        displayCheckMark: true,
+        detectionHeader: 'Success! Performing health check...',
+        isLoading: true,
+      })
+      //simulated fetch
+      if(this.state.currentAndNextStep === null) {
+        setTimeout(() => {
+          this.setState({
+            isLoading: false,
+            displayCheckMark: false,
+            currentAndNextStep: [ {number: 1 , text: steps[0] }, {number: 2, text: steps[1]} ]
+          })
+        }, 2000)
+      }
+    }
+  }
+  
+
   static navigationOptions = () => {
     return {
       header: null
@@ -54,8 +77,15 @@ export default class CameraOverlayWrapper extends Component {
     })
   }
 
+  // MOVE ON FROM HEALTH CHECK
+  // beginService = () => {
+  //   this.setState({
+  //     currentAndNextStep: [ {number: 1 , text: steps[0] }, {number: 2, text: steps[1]} ]
+  //   }) 
+  // }
+
   render() {
-    const { detectionHeader, displayCheckMark, currentAndNextStep } = this.state;
+    const { detectionHeader, displayCheckMark, currentAndNextStep, isLoading, showHealthCheck } = this.state;
     const { navigation } = this.props;
 
     return (
@@ -65,6 +95,8 @@ export default class CameraOverlayWrapper extends Component {
           onPressBack={() => currentAndNextStep ? this.onPressBack(currentAndNextStep) : navigation.goBack(null)}
           currentAndNextStep={currentAndNextStep}
           onPressNext={this.onPressNext}
+          isLoading={isLoading}
+          showHealthCheck={showHealthCheck}
         />
     );
   }

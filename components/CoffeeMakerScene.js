@@ -28,18 +28,18 @@ export default class CoffeeMakerScene extends Component {
   state = {
     isTracking: false,
     initialized: false,
-    text: 'Initializing tracking...'
+    text: 'Initializing tracking...',
+    // display: this.props.viroARImageDisplay,
   }
 
   getARScene() {
     return (
+      <ViroNode>
         <ViroARObjectMarker target={"coffeemaker"} onAnchorFound={() => {
-          this.setState({
-            text: "Coffee Maker"
-          })
+          this.props.anchorDetected();
         }}>
           <ViroImage
-            style={styles.imageStyle}
+            style={{display: 'none', flex: 1}}
             position={[0, 0.15, -0.01 ]}
             height={.07}
             width={.05}
@@ -47,6 +47,7 @@ export default class CoffeeMakerScene extends Component {
             source={require("../assets/ar-camera/up_arrow.png")}
           />
         </ViroARObjectMarker>
+      </ViroNode>
     )
   }
 
